@@ -1,0 +1,76 @@
+<style>
+  .imb-advice h2 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+  }
+  .imb-meta {
+    margin-bottom: 16px;
+  }
+  .imb-advice table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .imb-advice th,
+  .imb-advice td {
+    border: 1px solid #444;
+    padding: 6px 8px;
+    vertical-align: top;
+  }
+  .imb-advice th {
+    background: #f4f4f4;
+    text-align: left;
+  }
+  .imb-advice td.amount,
+  .imb-advice th.amount {
+    text-align: right;
+    white-space: nowrap;
+  }
+  .imb-total {
+    font-weight: 700;
+  }
+  .imb-purpose {
+    white-space: pre-wrap;
+  }
+</style>
+
+<div class="imb-advice">
+  <h2>Bank Payment Advice</h2>
+  <div class="imb-meta">
+    <div><strong>Imprest:</strong> {{ doc.name }}</div>
+    <div><strong>Date:</strong> {{ frappe.format(doc.imprest_date, {"fieldtype": "Date"}) }}</div>
+    <div><strong>Company:</strong> {{ doc.company }}</div>
+    {% if doc.paid_from_account %}
+    <div><strong>Paid From:</strong> {{ doc.paid_from_account }}</div>
+    {% endif %}
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 8%">#</th>
+        <th style="width: 28%">Account Name</th>
+        <th>Reason for Payment</th>
+        <th class="amount" style="width: 18%">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% set ns = namespace(total=0, i=0) %}
+      {% for row in doc.items %}
+        {% if row.md_decision == "Approved" %}
+          {% set ns.i = ns.i + 1 %}
+          {% set ns.total = ns.total + (row.amount or 0) %}
+          <tr>
+            <td>{{ ns.i }}</td>
+            <td>{{ row.beneficiary_name or row.party or "" }}</td>
+            <td class="imb-purpose">{{ row.purpose or "" }}</td>
+            <td class="amount">{{ frappe.format(row.amount, {"fieldtype": "Currency"}) }}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+      <tr class="imb-total">
+        <td colspan="3">Total</td>
+        <td class="amount">{{ frappe.format(ns.total, {"fieldtype": "Currency"}) }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

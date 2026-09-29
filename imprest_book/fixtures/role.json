@@ -1,0 +1,16 @@
+[
+	{
+		"desk_access": 1,
+		"doctype": "Role",
+		"is_custom": 1,
+		"name": "IMB Accounts",
+		"role_name": "IMB Accounts"
+	},
+	{
+		"desk_access": 1,
+		"doctype": "Role",
+		"is_custom": 1,
+		"name": "IMB Approver",
+		"role_name": "IMB Approver"
+	}
+]

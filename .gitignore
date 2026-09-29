@@ -1,0 +1,30 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Environment / IDE
+.DS_Store
+.env
+.env.*
+.venv/
+venv/
+.vscode/
+.idea/
+.cursor/
+
+# Node
+node_modules/
+
+# Frappe sites (never commit a linked bench)
+sites/
+logs/
+
+# Secrets
+*.pem
+credentials.json
+site_config.json

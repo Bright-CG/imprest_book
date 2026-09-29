@@ -1,0 +1,9 @@
+include *.txt
+include *.md
+include LICENSE
+recursive-include imprest_book *.py
+recursive-include imprest_book *.html
+recursive-include imprest_book *.js
+recursive-include imprest_book *.json
+recursive-include imprest_book *.css
+recursive-include imprest_book *.txt

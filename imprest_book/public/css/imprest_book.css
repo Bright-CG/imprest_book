@@ -1,0 +1,12 @@
+/* Purpose: show about 2–3 lines in the child grid, then clip. Full text stays on the row. */
+[data-fieldname="items"] [data-fieldname="purpose"] textarea,
+[data-fieldname="items"] .frappe-control[data-fieldname="purpose"] .control-value {
+	min-height: 3.6em;
+	max-height: 4.8em;
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	white-space: pre-wrap;
+	line-height: 1.3;
+}
