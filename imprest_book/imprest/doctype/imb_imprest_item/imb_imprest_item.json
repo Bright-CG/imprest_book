@@ -2,7 +2,7 @@
  "actions": [],
  "creation": "2026-09-29 00:00:00.000000",
  "doctype": "DocType",
- "editable_grid": 1,
+ "editable_grid": 0,
  "engine": "InnoDB",
  "field_order": [
   "payment_type",
@@ -10,15 +10,20 @@
   "party",
   "amount",
   "purpose",
+  "section_ledger",
   "account",
   "cost_center",
-  "md_decision",
+  "section_reference",
   "against_voucher_type",
   "against_voucher",
+  "section_beneficiary",
   "beneficiary_name",
   "bank_name",
   "bank_account_no",
+  "section_md",
+  "md_decision",
   "md_remarks",
+  "section_posting",
   "create_ledger_document",
   "payment_document_type",
   "payment_document",
@@ -57,7 +62,7 @@
    "reqd": 1
   },
   {
-   "columns": 3,
+   "columns": 2,
    "fieldname": "purpose",
    "fieldtype": "Small Text",
    "in_list_view": 1,
@@ -65,21 +70,15 @@
    "reqd": 1
   },
   {
-   "columns": 1,
-   "default": "Pending",
-   "fieldname": "md_decision",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "MD Decision",
-   "options": "Pending\nApproved\nRejected"
+   "fieldname": "section_ledger",
+   "fieldtype": "Section Break",
+   "label": "Ledger mapping"
   },
   {
    "allow_on_submit": 1,
-   "columns": 2,
    "description": "Required for Expense and Other (Journal Entry debit account). Optional for supplier payments if party payable account is used.",
    "fieldname": "account",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "label": "Expense / Ledger Account",
    "mandatory_depends_on": "eval:doc.payment_type=='Expense' || doc.payment_type=='Other'",
    "options": "Account"
@@ -90,6 +89,11 @@
    "fieldtype": "Link",
    "label": "Cost Center",
    "options": "Cost Center"
+  },
+  {
+   "fieldname": "section_reference",
+   "fieldtype": "Section Break",
+   "label": "Purchase invoice"
   },
   {
    "depends_on": "eval:doc.payment_type==\"Against Purchase Invoice\"",
@@ -104,6 +108,11 @@
    "fieldtype": "Dynamic Link",
    "label": "Against Voucher",
    "options": "against_voucher_type"
+  },
+  {
+   "fieldname": "section_beneficiary",
+   "fieldtype": "Section Break",
+   "label": "Beneficiary bank details"
   },
   {
    "fieldname": "beneficiary_name",
@@ -121,9 +130,28 @@
    "label": "Account Number"
   },
   {
+   "fieldname": "section_md",
+   "fieldtype": "Section Break",
+   "label": "MD decision"
+  },
+  {
+   "columns": 1,
+   "default": "Pending",
+   "fieldname": "md_decision",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "MD Decision",
+   "options": "Pending\nApproved\nRejected"
+  },
+  {
    "fieldname": "md_remarks",
    "fieldtype": "Small Text",
    "label": "MD Remarks"
+  },
+  {
+   "fieldname": "section_posting",
+   "fieldtype": "Section Break",
+   "label": "Payment document"
   },
   {
    "depends_on": "eval:doc.md_decision==\"Approved\"",
@@ -146,9 +174,11 @@
    "read_only": 1
   },
   {
+   "columns": 1,
    "default": "Not Created",
    "fieldname": "posting_status",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Posting Status",
    "options": "Not Created\nDraft\nSubmitted\nCancelled",
    "read_only": 1
@@ -156,7 +186,7 @@
  ],
  "istable": 1,
  "links": [],
- "modified": "2026-09-30 16:30:00.000000",
+ "modified": "2026-10-30 15:30:00.000000",
  "modified_by": "Administrator",
  "module": "Imprest",
  "name": "IMB Imprest Item",

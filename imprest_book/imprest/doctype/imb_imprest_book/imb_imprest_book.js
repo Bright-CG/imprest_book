@@ -118,15 +118,12 @@ function configure_item_grid(frm) {
 	if (!grid || !grid.update_docfield_property) {
 		return;
 	}
-	// Editable grid row dialog only shows in_list_view fields — keep account visible.
-	grid.update_docfield_property("account", "hidden", 0);
-	grid.update_docfield_property("account", "in_list_view", 1);
 	const can_edit_ledger_fields =
 		frm.doc.docstatus === 0 ||
-		(frappe.user.has_role("Accounts Manager") ||
-			frappe.user.has_role("Accounts User") ||
-			frappe.user.has_role("IMB Accounts") ||
-			frappe.user.has_role("System Manager"));
+		frappe.user.has_role("Accounts Manager") ||
+		frappe.user.has_role("Accounts User") ||
+		frappe.user.has_role("IMB Accounts") ||
+		frappe.user.has_role("System Manager");
 	grid.update_docfield_property("account", "read_only", can_edit_ledger_fields ? 0 : 1);
 	grid.update_docfield_property("cost_center", "read_only", can_edit_ledger_fields ? 0 : 1);
 }

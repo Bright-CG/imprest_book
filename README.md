@@ -64,6 +64,8 @@ bench build --app imprest_book
 
 For a local checkout, symlink the repo into `apps/imprest_book` instead of `get-app`.
 
+**Child table UX:** The payments grid shows summary columns only (Type, Party, Amount, etc.). Click the **row number** on the left (or the expand control) to open the full line editor with ledger account, bank details, MD fields, and **Create Payment / Journal**. The gear icon on the grid only chooses which summary columns appear in the table—not the full row form.
+
 ## License
 
 MIT
