@@ -22,11 +22,14 @@ after_install = ["imprest_book.install.run_after_install"]
 after_migrate = [
 	"imprest_book.setup_defaults.ensure_imb_roles",
 	"imprest_book.imprest.utils.approval_workflows.ensure_imb_approval_workflow",
+	"imprest_book.imprest.utils.reload_doctypes.reload",
 	"imprest_book.setup_workspace.create_workspace",
 	"imprest_book.setup_workspace.add_accounting_shortcut",
 ]
 
-doctype_js = {}
+doctype_js = {
+	"IMB Imprest Book": "imprest/doctype/imb_imprest_book/imb_imprest_book.js",
+}
 
 doc_events = {
 	"Payment Entry": {

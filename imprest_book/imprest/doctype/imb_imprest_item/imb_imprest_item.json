@@ -10,9 +10,9 @@
   "party",
   "amount",
   "purpose",
-  "md_decision",
   "account",
   "cost_center",
+  "md_decision",
   "against_voucher_type",
   "against_voucher",
   "beneficiary_name",
@@ -74,15 +74,18 @@
    "options": "Pending\nApproved\nRejected"
   },
   {
-   "depends_on": "eval:[\"Expense\", \"Other\"].includes(doc.payment_type)",
+   "allow_on_submit": 1,
+   "columns": 2,
+   "description": "Required for Expense and Other (Journal Entry debit account). Optional for supplier payments if party payable account is used.",
    "fieldname": "account",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Account",
-   "mandatory_depends_on": "eval:[\"Expense\", \"Other\"].includes(doc.payment_type)",
+   "label": "Expense / Ledger Account",
+   "mandatory_depends_on": "eval:doc.payment_type=='Expense' || doc.payment_type=='Other'",
    "options": "Account"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "cost_center",
    "fieldtype": "Link",
    "label": "Cost Center",

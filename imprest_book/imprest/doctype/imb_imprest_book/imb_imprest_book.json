@@ -81,6 +81,7 @@
    "label": "Payments"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "items",
    "fieldtype": "Table",
    "label": "Imprest Items",
