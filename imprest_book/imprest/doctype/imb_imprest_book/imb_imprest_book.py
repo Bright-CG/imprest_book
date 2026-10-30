@@ -121,6 +121,12 @@ class IMBImprestBook(Document):
 					)
 			if row.payment_type == "Against Purchase Invoice" and not row.against_voucher:
 				frappe.throw(_("Select a Purchase Invoice on row {0}.").format(row.idx))
+			if row.payment_type in ("Expense", "Other") and not row.account:
+				frappe.throw(
+					_("Select an expense account on row {0} for {1} payments.").format(
+						row.idx, row.payment_type
+					)
+				)
 
 	def _validate_md_decisions_for_submit(self):
 		approved = 0

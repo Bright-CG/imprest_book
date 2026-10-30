@@ -74,9 +74,12 @@
    "options": "Pending\nApproved\nRejected"
   },
   {
+   "depends_on": "eval:[\"Expense\", \"Other\"].includes(doc.payment_type)",
    "fieldname": "account",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Account",
+   "mandatory_depends_on": "eval:[\"Expense\", \"Other\"].includes(doc.payment_type)",
    "options": "Account"
   },
   {

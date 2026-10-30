@@ -128,6 +128,8 @@ def _make_payment_entry(parent, row):
 
 
 def _make_journal_entry(parent, row):
+	debit_account, credit_account = _journal_entry_accounts(parent, row)
+
 	je = frappe.new_doc("Journal Entry")
 	je.voucher_type = "Bank Entry"
 	je.company = parent.company
@@ -138,12 +140,11 @@ def _make_journal_entry(parent, row):
 	amount = flt(row.amount)
 
 	debit = {
+		"account": debit_account,
 		"debit_in_account_currency": amount,
 		"credit_in_account_currency": 0,
 		"user_remark": row.purpose,
 	}
-	if row.account:
-		debit["account"] = row.account
 	if row.cost_center:
 		debit["cost_center"] = row.cost_center
 	if row.party_type and row.party:
@@ -152,12 +153,11 @@ def _make_journal_entry(parent, row):
 	je.append("accounts", debit)
 
 	credit = {
+		"account": credit_account,
 		"debit_in_account_currency": 0,
 		"credit_in_account_currency": amount,
 		"user_remark": row.purpose,
 	}
-	if parent.paid_from_account:
-		credit["account"] = parent.paid_from_account
 	if row.cost_center:
 		credit["cost_center"] = row.cost_center
 	je.append("accounts", credit)
@@ -165,6 +165,21 @@ def _make_journal_entry(parent, row):
 	je.flags.ignore_mandatory = True
 	je.insert(ignore_permissions=True, ignore_mandatory=True)
 	return je
+
+
+def _journal_entry_accounts(parent, row):
+	"""Debit expense (row) and credit bank (header) must both be set."""
+	if not row.account:
+		frappe.throw(
+			_(
+				"Row {0}: set an expense account for {1} payments before creating a Journal Entry."
+			).format(row.idx, row.payment_type)
+		)
+	if not parent.paid_from_account:
+		frappe.throw(
+			_("Set Paid From (Bank Account) on the Imprest Book before creating a Journal Entry.")
+		)
+	return row.account, parent.paid_from_account
 
 
 def _copy_account_currency(doc, account_field, currency_field):
