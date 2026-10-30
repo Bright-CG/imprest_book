@@ -18,6 +18,7 @@ class IMBImprestBook(Document):
 
 	def validate(self):
 		self._apply_row_defaults()
+		self._protect_md_fields()
 		self._recalculate_totals()
 		self._stamp_authorization_users()
 		self._validate_rows()
@@ -40,6 +41,29 @@ class IMBImprestBook(Document):
 		state = (self.workflow_state or STATE_DRAFT).strip()
 		if state not in (STATE_DRAFT, STATE_PENDING):
 			frappe.throw(_("Only Draft or Pending Imprest Books can be deleted."))
+
+	def _protect_md_fields(self):
+		can_decide = bool(
+			set(frappe.get_roles()).intersection({"IMB Approver", "System Manager"})
+		) or frappe.session.user == "Administrator"
+		if self.is_new():
+			for row in self.items or []:
+				row.md_decision = "Pending"
+			return
+		if can_decide:
+			return
+		before = self.get_doc_before_save()
+		if not before:
+			return
+		before_map = {row.name: row for row in before.items or []}
+		for row in self.items or []:
+			old = before_map.get(row.name)
+			if not old:
+				row.md_decision = "Pending"
+				row.md_remarks = None
+				continue
+			if old.md_decision != row.md_decision or (old.md_remarks or "") != (row.md_remarks or ""):
+				frappe.throw(_("Only the MD (IMB Approver) can set row decisions."))
 
 	def _apply_row_defaults(self):
 		for row in self.items or []:

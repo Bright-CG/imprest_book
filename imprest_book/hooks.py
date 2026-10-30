@@ -1,6 +1,6 @@
 app_name = "imprest_book"
 app_title = "Imprest Book"
-app_publisher = "Bright"
+app_publisher = "Bright Godwin"
 app_description = "MD-approved disbursement book. Does not post GL; Payment Entry and Journal Entry remain the ledger documents."
 app_email = "brightgodwin9@gmail.com"
 app_license = "mit"
@@ -8,6 +8,7 @@ app_license = "mit"
 required_apps = ["erpnext"]
 
 app_include_css = ["/assets/imprest_book/css/imprest_book.css"]
+app_include_js = ["/assets/imprest_book/js/imprest_book.js"]
 
 fixtures = [
 	{

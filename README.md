@@ -39,6 +39,18 @@ Supplier Payment, Against Purchase Invoice, Expense, Employee Loan, Other.
 
 Type filters the Party field (Supplier vs Employee). Expense and Other do not require a party.
 
+## Repository layout
+
+Standard Frappe app package (install with `bench get-app`, not by copying a bench `sites/` folder):
+
+```
+imprest_book/          # repository root (setup.py, README)
+└── imprest_book/      # Python app package (hooks, DocTypes, public assets)
+    ├── imprest/       # module: DocTypes, print formats, utils
+    ├── fixtures/
+    └── public/
+```
+
 ## Install
 
 From a Frappe bench that already has ERPNext:

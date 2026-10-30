@@ -6,37 +6,24 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "naming_series",
   "company",
   "imprest_date",
-  "column_break_top",
   "paid_from_account",
-  "workflow_state",
-  "section_people",
   "requested_by",
-  "authorized_by",
-  "approved_by",
+  "naming_series",
+  "workflow_state",
   "section_items",
   "items",
   "section_totals",
   "total_requested",
-  "column_break_totals",
   "total_approved",
   "total_rejected",
-  "section_remarks",
   "remarks",
+  "authorized_by",
+  "approved_by",
   "amended_from"
  ],
  "fields": [
-  {
-   "default": "Imprest-.YYYY.-.MM.-.DD.-.##",
-   "fieldname": "naming_series",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "label": "Naming Series",
-   "options": "Imprest-.YYYY.-.MM.-.DD.-.##",
-   "reqd": 1
-  },
   {
    "fieldname": "company",
    "fieldtype": "Link",
@@ -56,37 +43,81 @@
    "reqd": 1
   },
   {
-   "fieldname": "column_break_top",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "paid_from_account",
    "fieldtype": "Link",
    "label": "Paid From (Bank Account)",
    "options": "Account"
   },
   {
-   "allow_on_submit": 1,
-   "fieldname": "workflow_state",
-   "fieldtype": "Link",
-   "hidden": 1,
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Status",
-   "no_copy": 1,
-   "options": "Workflow State"
-  },
-  {
-   "fieldname": "section_people",
-   "fieldtype": "Section Break",
-   "label": "Authorization"
-  },
-  {
    "fieldname": "requested_by",
    "fieldtype": "Link",
    "label": "Requested By",
-   "options": "User",
+   "options": "User"
+  },
+  {
+   "default": "Imprest-.YYYY.-.MM.-.DD.-.##",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Naming Series",
+   "options": "Imprest-.YYYY.-.MM.-.DD.-.##",
+   "reqd": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "Draft",
+   "fieldname": "workflow_state",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "no_copy": 1,
+   "options": "Workflow State",
    "read_only": 1
+  },
+  {
+   "fieldname": "section_items",
+   "fieldtype": "Section Break",
+   "label": "Payments"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Imprest Items",
+   "options": "IMB Imprest Item"
+  },
+  {
+   "fieldname": "section_totals",
+   "fieldtype": "Section Break",
+   "label": "Totals"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_requested",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Total Requested",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "total_approved",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Total Approved",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "total_rejected",
+   "fieldtype": "Currency",
+   "label": "Total Rejected",
+   "read_only": 1
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
   },
   {
    "fieldname": "authorized_by",
@@ -104,59 +135,6 @@
    "read_only": 1
   },
   {
-   "fieldname": "section_items",
-   "fieldtype": "Section Break",
-   "label": "Payments"
-  },
-  {
-   "fieldname": "items",
-   "fieldtype": "Table",
-   "label": "Imprest Items",
-   "options": "IMB Imprest Item",
-   "reqd": 1
-  },
-  {
-   "fieldname": "section_totals",
-   "fieldtype": "Section Break",
-   "label": "Totals"
-  },
-  {
-   "fieldname": "total_requested",
-   "fieldtype": "Currency",
-   "in_list_view": 1,
-   "label": "Total Requested",
-   "options": "Company:company:default_currency",
-   "read_only": 1
-  },
-  {
-   "fieldname": "column_break_totals",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "total_approved",
-   "fieldtype": "Currency",
-   "in_list_view": 1,
-   "label": "Total Approved",
-   "options": "Company:company:default_currency",
-   "read_only": 1
-  },
-  {
-   "fieldname": "total_rejected",
-   "fieldtype": "Currency",
-   "label": "Total Rejected",
-   "options": "Company:company:default_currency",
-   "read_only": 1
-  },
-  {
-   "fieldname": "section_remarks",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "remarks",
-   "fieldtype": "Small Text",
-   "label": "Remarks"
-  },
-  {
    "fieldname": "amended_from",
    "fieldtype": "Link",
    "hidden": 1,
@@ -169,7 +147,7 @@
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-29 00:00:00.000000",
+ "modified": "2026-09-30 17:40:00.000000",
  "modified_by": "Administrator",
  "module": "Imprest",
  "name": "IMB Imprest Book",
@@ -241,31 +219,19 @@
    "write": 1
   },
   {
-   "permlevel": 1,
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
    "read": 1,
-   "role": "System Manager",
+   "report": 1,
+   "role": "Administrator",
+   "share": 1,
+   "submit": 1,
    "write": 1
-  },
-  {
-   "permlevel": 1,
-   "read": 1,
-   "role": "IMB Approver",
-   "write": 1
-  },
-  {
-   "permlevel": 1,
-   "read": 1,
-   "role": "Accounts Manager"
-  },
-  {
-   "permlevel": 1,
-   "read": 1,
-   "role": "Accounts User"
-  },
-  {
-   "permlevel": 1,
-   "read": 1,
-   "role": "IMB Accounts"
   }
  ],
  "sort_field": "modified",

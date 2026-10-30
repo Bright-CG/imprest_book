@@ -1,4 +1,4 @@
-# Byte-compiled / cache
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
@@ -6,9 +6,18 @@ __pycache__/
 .eggs/
 dist/
 build/
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
 
 # Environment / IDE
 .DS_Store
+*.swp
+*.swo
 .env
 .env.*
 .venv/
@@ -17,14 +26,21 @@ venv/
 .idea/
 .cursor/
 
-# Node
+# Node (if you add a frontend toolchain later)
 node_modules/
 
-# Frappe sites (never commit a linked bench)
+# Frappe bench / site (never commit a linked bench)
 sites/
 logs/
+*.log
+site_config.json
 
-# Secrets
+# Secrets and keys
 *.pem
 credentials.json
-site_config.json
+**/private/*.json
+
+# Local / scratch
+*.bak
+*~
+command.txt

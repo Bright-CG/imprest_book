@@ -1,18 +1,10 @@
-# Copyright (c) 2026, Bright and contributors
-# For license information, please see license.txt
+// Copyright (c) 2026, Bright and contributors
+// For license information, please see license.txt
 
 frappe.ui.form.on("IMB Imprest Book", {
 	onload(frm) {
-		if (frm.is_new()) {
-			if (!frm.doc.company) {
-				const company = frappe.defaults.get_user_default("Company");
-				if (company) {
-					frm.set_value("company", company);
-				}
-			}
-			if (!frm.doc.requested_by) {
-				frm.set_value("requested_by", frappe.session.user);
-			}
+		if (frm.is_new() && !frm.doc.requested_by) {
+			frm.set_value("requested_by", frappe.session.user);
 		}
 
 		frm.set_query("paid_from_account", () => ({
@@ -38,13 +30,19 @@ frappe.ui.form.on("IMB Imprest Book", {
 			},
 		}));
 		frm.set_query("against_voucher", "items", (doc, cdt, cdn) => {
-			const row = locals[cdt][cdn];
+			const row = locals[cdt][cdn] || {};
 			const filters = { docstatus: 1, company: doc.company };
 			if (row.party) {
 				filters.supplier = row.party;
 			}
 			return { filters };
 		});
+
+		try {
+			lock_md_columns(frm);
+		} catch (e) {
+			console.error("IMB Imprest Book MD column lock failed", e);
+		}
 
 		if (frm.doc.docstatus === 1) {
 			(frm.doc.items || []).forEach((row) => {
@@ -56,20 +54,6 @@ frappe.ui.form.on("IMB Imprest Book", {
 					: __("Row {0}: {1}", [row.idx, row.party || row.payment_type]);
 				frm.add_custom_button(label, () => create_ledger_for_row(frm, row.name), __("Create Payment / Journal"));
 			});
-		}
-
-		if (frm.dashboard && frm.dashboard.set_headline) {
-			if (frm.doc.docstatus === 0) {
-				frm.dashboard.set_headline(
-					__(
-						"Imprest Book does not post to accounts. Use Actions: Send for Authorization, then MD Submit. Create Payment Entry / Journal Entry only after Completed."
-					)
-				);
-			} else if (frm.doc.docstatus === 1) {
-				frm.dashboard.set_headline(
-					__("Completed. Print approved rows for the bank. Create Draft Payment Entry or Journal Entry per approved row — those documents post GL.")
-				);
-			}
 		}
 	},
 
@@ -111,6 +95,22 @@ frappe.ui.form.on("IMB Imprest Item", {
 		create_ledger_for_row(frm, cdn);
 	},
 });
+
+function can_set_md_decision(frm) {
+	const roles = frappe.user_roles || [];
+	const allowed = roles.includes("IMB Approver") || roles.includes("System Manager");
+	return allowed && frm.doc.docstatus === 0 && (frm.doc.workflow_state || "Draft") === "Pending";
+}
+
+function lock_md_columns(frm) {
+	const grid = frm.fields_dict.items && frm.fields_dict.items.grid;
+	if (!grid || !grid.update_docfield_property) {
+		return;
+	}
+	const read_only = can_set_md_decision(frm) ? 0 : 1;
+	grid.update_docfield_property("md_decision", "read_only", read_only);
+	grid.update_docfield_property("md_remarks", "read_only", read_only);
+}
 
 function party_type_for(payment_type) {
 	if (payment_type === "Supplier Payment" || payment_type === "Against Purchase Invoice") {
