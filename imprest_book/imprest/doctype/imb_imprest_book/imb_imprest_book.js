@@ -118,6 +118,26 @@ function configure_item_grid(frm) {
 	if (!grid || !grid.update_docfield_property) {
 		return;
 	}
+	// Frappe hides empty read-only child fields on submitted parents unless allow_on_submit is set.
+	const editable_after_submit = [
+		"account",
+		"cost_center",
+		"party_type",
+		"party",
+		"against_voucher_type",
+		"against_voucher",
+		"beneficiary_name",
+		"bank_name",
+		"bank_account_no",
+		"md_remarks",
+	];
+	editable_after_submit.forEach((fieldname) => {
+		grid.update_docfield_property(fieldname, "allow_on_submit", 1);
+		grid.update_docfield_property(fieldname, "hidden", 0);
+	});
+	if (grid.meta) {
+		grid.meta.editable_grid = 0;
+	}
 	const can_edit_ledger_fields =
 		frm.doc.docstatus === 0 ||
 		frappe.user.has_role("Accounts Manager") ||
